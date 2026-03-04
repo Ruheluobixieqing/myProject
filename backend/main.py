@@ -23,6 +23,6 @@ def health():
     # 生产级健康检查应该包括：数据库连接、Redis、外部服务连通性等
     return {"status": "ok"}
 
-# 后续第 2 步会挂载 api/v1 路由，例如：
-# from api.v1 import auth_router
-# app.include_router(auth_router, prefix="/api/v1", tags=["auth"])
+from api.v1 import api_router
+
+app.include_router(api_router)

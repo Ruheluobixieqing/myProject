@@ -17,6 +17,11 @@ class IUserRepository(ABC):
         """创建用户，返回 id 与 email。"""
         pass
 
+    @abstractmethod
+    def find_by_email(self, email: str) -> Optional["LoginUserResult"]:
+        """按邮箱查找用户，用于登录；不存在返回 None。"""
+        pass
+
 
 # 跨层数据传输
 class UserCreateResult:
@@ -24,3 +29,13 @@ class UserCreateResult:
     def __init__(self, id: UUID, email: str):
         self.id = id
         self.email = email
+
+
+class LoginUserResult:
+    """登录时按邮箱查出的用户信息（不含明文密码）。"""
+    def __init__(self, id: UUID, email: str, password_hash: str, role: str, status: str):
+        self.id = id
+        self.email = email
+        self.password_hash = password_hash
+        self.role = role
+        self.status = status

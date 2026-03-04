@@ -10,9 +10,9 @@ class Settings(BaseSettings):
     # 数据库配置
     DATABASE_URL: str = "postgresql://postgres:postgres@localhost:5432/myproject"
 
-    # 鉴权相关，暂时保留
-    # SECRET_KEY: str = ""
-    # ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    # JWT 鉴权
+    SECRET_KEY: str = "change-me-in-production"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
 
 settings = Settings()

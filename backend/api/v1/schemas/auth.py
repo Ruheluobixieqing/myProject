@@ -13,3 +13,14 @@ class RegisterResponse(BaseModel):
     email: str = Field(..., description="邮箱")
 
     model_config = {"from_attributes": True}
+
+
+class LoginRequest(BaseModel):
+    email: EmailStr = Field(..., description="邮箱")
+    password: str = Field(..., description="密码")
+
+
+class LoginResponse(BaseModel):
+    access_token: str = Field(..., description="JWT")
+    token_type: str = Field(default="bearer", description="类型")
+    expires_in: int = Field(..., description="有效秒数")

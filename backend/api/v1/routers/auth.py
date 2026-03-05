@@ -84,9 +84,9 @@ def login(body: LoginRequest, service: AuthService = Depends(get_auth_service)):
         _err(401, "401", "邮箱或密码错误")
 
 
-# ---------- 用于测试第 4 步鉴权：需要登录 / 需要管理员 ----------
-
-@router.get("/me")
+@router.get(
+    "/me"
+)
 def me(current_user: CurrentUserResult = Depends(get_current_user)):
     """当前登录用户信息（需带有效 token）。用于验证 get_current_user。"""
     return {
@@ -97,7 +97,9 @@ def me(current_user: CurrentUserResult = Depends(get_current_user)):
     }
 
 
-@router.get("/admin-check")
+@router.get(
+    "/admin-check"
+)
 def admin_check(current_user: CurrentUserResult = Depends(require_admin)):
     """仅管理员可访问。用于验证 require_admin。"""
     return {"message": "ok", "role": current_user.role}

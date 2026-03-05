@@ -2,7 +2,7 @@
 .venv/
 
 # 环境变量
-.env/
+*.env/
 
 # 缓存文件
 __pycache__/

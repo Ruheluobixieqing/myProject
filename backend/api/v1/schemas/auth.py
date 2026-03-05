@@ -3,9 +3,9 @@ from pydantic import BaseModel, EmailStr, Field
 
 
 class RegisterRequest(BaseModel):
-    email: EmailStr = Field(..., description="邮箱，必填且需要校验唯一性")
-    password: str = Field(..., min_length=5, description="密码，至少 5 位")
-    username: str | None = Field(None, max_length=255, description="用户名，可选，可重复")
+    email: EmailStr = Field(..., description="邮箱，必填且需要校验唯一性", example="user@example.com")
+    password: str = Field(..., min_length=5, description="密码，至少 5 位", example="password123")
+    username: str | None = Field(None, max_length=255, description="用户名，可选，可重复", example="张三")
 
 
 class RegisterResponse(BaseModel):
@@ -16,8 +16,8 @@ class RegisterResponse(BaseModel):
 
 
 class LoginRequest(BaseModel):
-    email: EmailStr = Field(..., description="邮箱")
-    password: str = Field(..., description="密码")
+    email: EmailStr = Field(..., description="邮箱", example="user@example.com")
+    password: str = Field(..., description="密码", example="password123")
 
 
 class LoginResponse(BaseModel):

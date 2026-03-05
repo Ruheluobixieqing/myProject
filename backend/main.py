@@ -19,7 +19,7 @@ app.add_middleware(
 
 @app.get("/health")
 def health():
-    """健康检查，便于部署与排查。"""
+    """健康检查，便于部署与排查问题"""
     # 生产级健康检查应该包括：数据库连接、Redis、外部服务连通性等
     return {"status": "ok"}
 

@@ -13,6 +13,8 @@ from infrastructure.persistence.database import get_db
 from infrastructure.persistence.postgres.user_repository import UserRepository
 from infrastructure.security import PasswordHasher, create_access_token
 from api.v1.schemas.auth import RegisterRequest, RegisterResponse, LoginRequest, LoginResponse
+from api.v1.dependencies import get_current_user, require_admin
+from domain.user.repository import CurrentUserResult
 
 router = APIRouter()
 
@@ -56,7 +58,7 @@ def register(body: RegisterRequest, service: AuthService = Depends(get_auth_serv
     except EmailAlreadyExistsError as e:
         _err(400, "400", "该邮箱已被注册", {"email": e.email})
 
-    
+
 @router.post(
     "/login",
     response_model=LoginResponse,
@@ -80,3 +82,22 @@ def login(body: LoginRequest, service: AuthService = Depends(get_auth_service)):
         _err(403, "403", "账号已封禁，无法登录", {"email": e.email})
     except InvalidPasswordError:
         _err(401, "401", "邮箱或密码错误")
+
+
+# ---------- 用于测试第 4 步鉴权：需要登录 / 需要管理员 ----------
+
+@router.get("/me")
+def me(current_user: CurrentUserResult = Depends(get_current_user)):
+    """当前登录用户信息（需带有效 token）。用于验证 get_current_user。"""
+    return {
+        "id": str(current_user.id),
+        "email": current_user.email,
+        "role": current_user.role,
+        "status": current_user.status,
+    }
+
+
+@router.get("/admin-check")
+def admin_check(current_user: CurrentUserResult = Depends(require_admin)):
+    """仅管理员可访问。用于验证 require_admin。"""
+    return {"message": "ok", "role": current_user.role}

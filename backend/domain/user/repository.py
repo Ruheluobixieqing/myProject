@@ -22,6 +22,11 @@ class IUserRepository(ABC):
         """按邮箱查找用户，用于登录；不存在返回 None。"""
         pass
 
+    @abstractmethod
+    def find_by_id(self, user_id: "UUID") -> Optional["CurrentUserResult"]:
+        """按 id 查找用户，用于鉴权；不存在返回 None。"""
+        pass
+
 
 # 跨层数据传输
 class UserCreateResult:
@@ -37,5 +42,14 @@ class LoginUserResult:
         self.id = id
         self.email = email
         self.password_hash = password_hash
+        self.role = role
+        self.status = status
+
+
+class CurrentUserResult:
+    """鉴权用：当前登录用户信息（不含密码）。"""
+    def __init__(self, id: UUID, email: str, role: str, status: str):
+        self.id = id
+        self.email = email
         self.role = role
         self.status = status

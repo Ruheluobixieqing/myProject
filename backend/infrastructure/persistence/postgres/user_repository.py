@@ -2,7 +2,7 @@
 from uuid import UUID
 from sqlalchemy.orm import Session
 
-from domain.user.repository import IUserRepository, UserCreateResult, LoginUserResult
+from domain.user.repository import IUserRepository, UserCreateResult, LoginUserResult, CurrentUserResult
 from infrastructure.persistence.postgres.models import UserModel, UserRole, UserStatus
 
 
@@ -25,6 +25,12 @@ class UserRepository(IUserRepository):
             role=user.role,
             status=user.status,
         )
+
+    def find_by_id(self, user_id: UUID) -> CurrentUserResult | None:
+        user = self._db.query(UserModel).filter(UserModel.id == user_id).first()
+        if user is None:
+            return None
+        return CurrentUserResult(id=user.id, email=user.email, role=user.role, status=user.status)
 
     def create(self, email: str, password_hash: str, username: str = "") -> UserCreateResult:
         user = UserModel(
